@@ -1,0 +1,36 @@
+List *Delete(List *L,int i)
+{
+    List *p,*s;
+    if(i==1)
+    {
+        s=L;
+        if(L!=NULL)
+        {
+            L=L->next;
+            return L;
+        }
+        else
+            return NULL;
+        //free(s);
+        //return L;
+    }
+    p=findkth(i-1,L);
+    if(p==NULL)
+    {
+        printf("the deleted node is out of range!\n");
+        return NULL;
+    }
+    else if(p->next==NULL)
+    {
+        printf("node does not exist!\n");
+        return NULL;
+    }
+    else
+    {
+        s=p->next;
+        p->next=s->next;
+        free(s);
+        return L;
+    }
+
+}
