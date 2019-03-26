@@ -1,0 +1,62 @@
+#include<malloc.h>
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef struct Node  //创造一个结构体
+{
+    int number;
+    int password;
+    Node *next;
+} List,*linklist;
+
+linklist joseph(int n)
+{
+    int i;
+    linklist p,q;
+    p=q=(linklist)malloc(sizeof(List));       //开始生成循环链表
+    p->number=1;
+    printf("input the password:");
+    scanf("%d",&p->password);
+    for(i=2;i<=n;i++)
+    {
+        linklist t;
+        t=(linklist)malloc(sizeof(List));
+        t->number=i;
+        printf("input the password:");
+        scanf("%d",&t->password);
+        q->next=t;
+        q=t;
+    }
+    q->next=p;
+    return q;
+}
+void Output(linklist L,int m,int n)     //m是上限，n是人数
+{
+    int i;
+    linklist p;
+    while(n>0)
+    {
+        for(i=1;i<m;i++)
+        {
+            L=L->next;
+        }
+        p=L->next;
+        printf("the %d people,his password is %d\n",p->number,p->password);
+        L->next=p->next;
+        m=p->password;
+        free(p);
+        n--;
+    }
+}
+int main()
+{
+    int n,m;
+    linklist L;
+    printf("input the number of member:");
+    scanf("%d",&n);
+    printf("input the limit:");
+    scanf("%d",&m);
+    L=joseph(n);
+    Output(L,m,n);
+    return 0;
+}
