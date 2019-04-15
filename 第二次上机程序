@@ -1,0 +1,72 @@
+#include<stdio.h>
+#define Maxlen 100
+struct Stack{
+   int data[Maxlen];
+   int top;
+}s;
+int n;
+void Initstack()
+{
+    s.top=-1;
+}
+void push(int q)
+{
+    s.top++;
+    s.data[s.top]=q;
+}
+int pop()
+{
+    int temp;
+    temp=s.data[s.top];
+    s.top--;
+    return temp;
+}
+int Emptys()
+{
+    if(s.top==-1)
+        return 1;
+    else
+        return 0;
+}
+
+/*每处理一节车厢,都有两种情况,A.下一车厢是否进栈；B.当前车厢是否出栈
+用栈递归处理每一节车厢,path[]用来记录每一种输出车厢序列的结果*/
+
+void process(int num,int path[],int curp) //假设第一节车厢已进栈
+{
+    int temp,i;
+    if(num<n)                                /*下一车厢进栈的情况*/
+    {
+        push(num+1);
+        process(num+1,path,curp);        //下一车厢递归
+
+        pop();                               /*下一车厢不进栈*/
+    }
+
+    if(!Emptys())                            /*当前车厢出栈的情况*/
+    {
+        temp=pop();
+        path[curp]=temp;
+        curp++;
+        process(num,path,curp);          //下一车厢递归
+
+        push(temp);                          /*当前车厢不出栈*/
+    }
+
+    if(num==n&&Emptys())                     /*最底层的程序，所有车厢已处理完毕，输出结果*/
+    {
+        for(i=0;i<curp;i++)
+            printf("%2d",path[i]);
+        printf("\n");
+    }
+}
+int main()
+{
+    int path[Maxlen];
+    printf("输入要调整的车厢总数:");
+    scanf("%d",&n);
+    Initstack();
+    push(1);                             //假设第一节车厢已进栈
+    printf("所有输出序列:\n");
+    process(1,path,0);
+}
